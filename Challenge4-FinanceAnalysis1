@@ -1,0 +1,99 @@
+                                                     --Challenge4: Finance Analysis
+                                                    
+
+--Submitted By Shreya Singh
+
+
+--Q1. What are the names of all the customers who live in New York?
+
+select concat(firstname,' ', lastname) as Fullname 
+from customers 
+where city = 'New York';
+
+--Q2. What is the total number of accounts in the Accounts table? 
+
+select count(accountid) as total_accounts 
+from accounts;
+
+--Q3. What is the total balance of all checking accounts?
+
+select accounttype, sum(balance) as total_balance 
+from accounts 
+group by accounttype 
+having accounttype = 'Checking' ;
+
+--Q4. What is the total balance of all accounts associated with customers who live in Los Angeles?
+
+select sum(a.balance) as total_balance, c.city 
+from accounts a 
+join customers c 
+on a.customerid = c.customerid 
+group by c.city 
+having c.city = 'Los Angeles';
+
+--Q5. Which branch has the highest average account balance?
+
+select b.branchname, round(avg(a.balance),0) as avg_balance 
+from branches b 
+join accounts a 
+on b.branchid = a.branchid 
+group by b.branchname 
+order by avg_balance desc limit 1;
+
+--Q6. Which customer has the highest current balance in their accounts?
+
+select concat(c.firstname, c.lastname) as fullname, max(a.balance) as current_balance 
+from customers c 
+join accounts a 
+on c.customerid = a.customerid 
+group by fullname 
+order by current_balance desc limit 1;
+
+
+ --Q7. Which customer has made the most transactions in the Transactions table?
+
+select concat(c.firstname, c.lastname) as fullname, count(t.amount) as most_transaction 
+from transactions t 
+join accounts a 
+on t.accountid = a.accountid 
+join customers c 
+on a.customerid = c.customerid 
+group by fullname 
+order by most_transaction desc limit 1;
+
+--Q8. Which branch has the highest total balance across all of its accounts?
+
+select b.branchname, sum(a.balance) as total_balance 
+from branches b 
+join accounts a 
+on b.branchid = a.branchid 
+group by b.branchname 
+order by total_balance desc limit 1; 
+
+--Q9. Which customer has the highest total balance across all of their accounts, including savings and checking accounts?
+
+select concat(c.firstname,c.lastname) as fullname, sum(a.balance) as total_balance 
+from customers c 
+join accounts a
+on c.customerid = a.customerid 
+group by fullname 
+order by total_balance desc limit 1;
+
+--Q10. Which branch has the highest number of transactions in the Transactions table?
+
+select b.branchname, count(t.amount) as total_transaction 
+from transactions t 
+join accounts a 
+on t.accountid = a.accountid 
+join branches b
+on a.branchid = b.branchid 
+group by b.branchname 
+order by total_transaction desc limit 1;
+
+
+
+
+
+
+
+
